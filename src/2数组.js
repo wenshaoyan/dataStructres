@@ -3,6 +3,10 @@
  */
 'use strict';
 const Log = require('./modules/log');
+const customStruct = require('./modules/custom-struct');
+const CustomArray = customStruct.CustomArray;
+
+
 
 // 1-用数组计算斐波那契数列前20个数字 第一个数为1 第二个数为2 之后的数为前两个之和
 const log1 = new Log(false);
@@ -27,5 +31,12 @@ for (let index = arr.length; index >= 0; index--) {
 arr[0]=-1;
 arr.unshift(-3,-2);
 log2.i(arr);
+
+
+
+let customArray = new CustomArray({},2,3);
+customArray.unshift(1)
+log2.i(customArray)
+
 
 
