@@ -36,7 +36,7 @@ log2.i(arr);
 
 let customArray = new CustomArray({},2,3);
 customArray.unshift(1)
-log2.i(customArray)
+log2.i(customArray.toString())
 
 
 

@@ -36,7 +36,8 @@ class Log{
         if (this._bool){
             let arr = Array.prototype.slice.call(arguments);
             arr.unshift(format(new Date(),dateFormat));
-            console.log.apply(console, arr);
+            // console.log.apply(console, arr); // es5
+            console.log(...arr);    // es6
         }
     }
 

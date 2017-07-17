@@ -5,9 +5,13 @@
 class CustomArray extends Array{
     constructor(){
         let args = Array.prototype.slice.call(arguments);
-        console.log(args)
-        super(args);
+        super(...args);
     }
+
+    unshift(){
+        super.unshift(1)
+    }
+
 
 
 }
