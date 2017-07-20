@@ -32,7 +32,7 @@ log2.i(customArray);
 
 // 3-多维数组
 
-var log3 = new Log(true);
+var log3 = new Log(false);
 const averageTemp = [];
 averageTemp[0] = [];
 averageTemp[0][0] = 1;
@@ -61,10 +61,20 @@ const numbers = [6,2,8,4];
 const isEven = function (x) {
     return x % 2 == 0;
 };
-log3.i("判断数组元素是否都为偶数",numbers.every(isEven));  // every: 对数组中的每个元素进行遍历,如果该函数每项都返回true 则返回true
+log3.i("判断数组元素是否都为偶数",numbers.every(isEven));  // every:
 
-var customArray2 = new CustomArray(2,4,6);
-log3.i(customArray2.every(isEven));
+const customArray2 = new CustomArray(1,4,1,2,4,4,44,5,62,3);
 
-customArray2.concat()
+// log3.i(customArray2.every(isEven));
+
+customArray2.forEach((val)=>{
+    //log3.i(val)
+});
+
+// log3.i('========',customArray2.map(isEven));
+// log3.i(customArray2.filter(isEven));
+ //customArray2.reverse();
+log3.i(customArray2.sort());
+
+
 

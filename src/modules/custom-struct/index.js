@@ -5,3 +5,4 @@
 
 
 exports.CustomArray = require('./lib/CustomArray');
+exports.CustomStack = require('./lib/CustomStack');
