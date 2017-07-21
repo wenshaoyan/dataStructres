@@ -49,6 +49,15 @@ const CustomStack = (function() {
         print(){
             return this[_items].toString();
         }
+        /**
+         * 按从上到下返回数组
+         * @param order  true 顺序 false 倒序
+         */
+        toArray(){
+            return this[_items];
+        }
+
+
     }
 
     return CustomStack;
