@@ -83,27 +83,3 @@ log5.i("==========");
 log5.i("==========");
 log5.i(fibFunc1(1005));
 
-// 6-深拷贝的方法
-const sourceArray = [1, 2, {b: {c: 1}}];
-const sourceJson = {a: 2, b: {c: 1}};
-let copyArray;
-let copyJson;
-
-const log6 = new Log(true);
-// 1 es6的assign方法
-
-copyArray = Object.assign([], sourceArray);
-copyJson = Object.assign({}, sourceJson);
-copyArray[2].b.c = 2;
-copyArray[0] = 222;
-copyJson.b.c = 3;
-log6.i(sourceArray, sourceJson);    // sourceArray 和sourceJson只能第一层的深拷贝 并不是真正的深拷贝
-
-// 2-JSON.parse
-copyArray = JSON.parse(JSON.stringify(sourceArray));
-copyJson = JSON.parse(JSON.stringify(copyJson));
-copyArray[2].b.c = 333;
-copyArray[0] = 333;
-copyJson.b.c = 333;
-log6.i(sourceArray, sourceJson);    // 能做到真正的深拷贝 但是只能对Number, String, Boolean, Array, 扁平对象，即那些能够被 json 直接表示的数据结构
-                                        // 不能对RegExp和function进行转换

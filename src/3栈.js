@@ -8,9 +8,13 @@ const CustomStack = customStruct.CustomStack;
 
 
 const log1 = new Log(true);
-let customStack1 = new CustomStack("1");
-let customStack2 = new CustomStack("1222");
-// customStack1.test()
-customStack1._items=2;
-customStack1.sayName();
-customStack2.sayName();
+let customStack1 = new CustomStack();
+customStack1.push(1,2,3);
+log1.i(customStack1.print());
+log1.i(customStack1.pop(),customStack1.pop(),customStack1.pop(),customStack1.pop(),customStack1.peek());
+customStack1.clear();
+log1.i(customStack1.size());
+
+
+
+
