@@ -20,7 +20,7 @@ const ArrayList = (function () {
         }
 
         /**
-         * 冒泡排序  O(n^2)
+         * 冒泡排序 冒泡排序法是两两依次比较，并做交换，交换的次数多 O(n^2)
          */
         bubbleSort() {
             let count = 0;
@@ -60,6 +60,24 @@ const ArrayList = (function () {
             return count;
         }
 
+        /**
+         * 选择排序 每次循环找出最值，循环结束后将最值调整到合适位置，交换的次数少。 O((n^2)/2 )
+         * @return {number}
+         */
+        selectSort(){
+            let count = 0;
+            let indexMin;
+            for (let i = 0; i < this.size()-1; i++) {
+                indexMin = i ;
+                for (let j = i+1; j < this.size() ; j++) {
+                    if (this[_items][j]<this[_items][indexMin]) indexMin = j;
+                    count++;
+                }
+                if (i != indexMin) this.swap(i, indexMin);
+            }
+
+            return count;
+        }
         size() {
             return this[_items].length;
         }

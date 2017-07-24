@@ -36,3 +36,4 @@ binarySearchTree1.remove(6);
 binarySearchTree1.remove(5);
 binarySearchTree1.remove(15);
 log1.i(binarySearchTree1.toString(1));
+// AVL树 红黑树 堆积树
