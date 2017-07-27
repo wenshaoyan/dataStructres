@@ -15,3 +15,8 @@ log1.i(list1.toString());
 // log1.i(list1.modifiedBubbleSort());
 log1.i(list1.selectSort());
 log1.i(list1.toString());
+
+let buf = new Buffer(10);
+console.log(buf)
+let buf1 = Buffer.concat([]);
+console.log(buf1)
