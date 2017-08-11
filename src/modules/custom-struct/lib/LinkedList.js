@@ -164,7 +164,7 @@ const LinkedList = (function () {
          * @return {element}    元素值
          */
         getHead() {
-            return this[_head].element;
+            return this[_head];
         }
 
         toString() {
