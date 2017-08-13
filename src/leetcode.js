@@ -18,7 +18,6 @@ const Log = require('./modules/log');
  * @param target    目标值
  * @returns {Array} 计算后两个元素的下标
  */
-const log1 = new Log(false);
 let twoSum = (nums, target) => {  //    O(n^2)   O(1)
     const result = [];
     outerloop://命名外圈语句
@@ -61,6 +60,7 @@ let twoSum2 = (nums, target) => {//    O(n)   O(n)
         map.set(nums[i], i);
     }
 };
+const log1 = new Log(false);
 const result = twoSum2([1, 2, 3, 4, 6, 5], 8);
 log1.i(result);
 
@@ -79,7 +79,6 @@ log1.i(result);
  * @param l2
  * @returns
  */
-const log2 = new Log(true);
 const addTwoNumbers = (l1, l2) => { // O(max(l1.length,l2.length)) O(max(l1.length,l2.length))
     let current1 = l1.getHead();
     let current2 = l2.getHead();
@@ -113,6 +112,7 @@ const addTwoNumbers = (l1, l2) => { // O(max(l1.length,l2.length)) O(max(l1.leng
 
     return list;
 };
+const log2 = new Log(false);
 
 
 let customStruct = require('./modules/custom-struct');
@@ -121,22 +121,91 @@ const linkedList1 = new LinkedList();
 const linkedList2 = new LinkedList();
 
 /*linkedList1.append(2);
-linkedList1.append(4);
-linkedList1.append(3);
+ linkedList1.append(4);
+ linkedList1.append(3);
 
 
-linkedList2.append(5);
-linkedList2.append(6);
-linkedList2.append(4);*/
+ linkedList2.append(5);
+ linkedList2.append(6);
+ linkedList2.append(4);*/
 linkedList1.append(5);
 linkedList2.append(5);
 /*let v1 = [2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 9];
-let v2 = [5, 6, 4, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 9, 9, 9, 9];
-v1.forEach((value) => {
-    linkedList1.append(value);
-})
-v2.forEach((value) => {
-    linkedList2.append(value);
-})*/
+ let v2 = [5, 6, 4, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 2, 4, 3, 9, 9, 9, 9];
+ v1.forEach((value) => {
+ linkedList1.append(value);
+ })
+ v2.forEach((value) => {
+ linkedList2.append(value);
+ })*/
 log2.i(addTwoNumbers(linkedList1, linkedList2));
 
+
+/**
+ * Given a string, find the length of the longest substring without repeating characters.
+ * 给定一个字符串,找到最长并且没有重复字符的子串
+ * 如:  abcabcd    abc   3
+ *      bbbbb       b   1
+ * @param s
+ * @return {number}
+ */
+const lengthOfLongestSubstring = function (s) { // O(n)  O(n)
+    let maxSub = '';
+    let currentSub = [];
+    let currentStr;
+    for (let i = 0; i < s.length; i++) {
+        currentStr = s[i];
+        let index = currentSub.indexOf(currentStr);
+        if (index != -1) {
+            if (currentSub.length >= maxSub.length) {
+                maxSub = setJoin(currentSub);
+            }
+            currentSub = currentSub.slice(index+1,currentSub.length);
+        }
+        currentSub.push(currentStr)
+
+    }
+    if (currentSub.length >= maxSub.length) {
+        maxSub = setJoin(currentSub);
+    }
+    log3.i(maxSub);
+    return maxSub.length;
+};
+const setJoin = (list) => {
+    let s = '';
+    list.forEach((value) => {
+        s += value;
+    });
+    return s;
+};
+const log3 = new Log(false);
+log3.i(lengthOfLongestSubstring("456789022ebadb2"));
+
+
+/**
+ * There are two sorted arrays nums1 and nums2 of size m and n respectively.
+ * Find the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).
+ * 两个排序的数组nums1和nums2 大小分别为m和n 找到两个数组的之间的中位数 并且时间复杂度为O(log (m+n)).
+ * @param nums1
+ * @param nums2
+ * @return {number}
+ */
+const findMedianSortedArrays = function(nums1, nums2) {
+    const num3 = nums1.concat(nums2);
+    num3.sort((v1,v2)=>{
+        return v1-v2;
+    });
+    const len = num3.length;
+    const index = Math.floor(len/2);
+    let value ;
+    if (len % 2 === 0){
+        value = (num3[index]+num3[index-1])/2;
+    }else{
+        value = num3[index];
+    }
+
+    return value;
+};
+const log4 = new Log(true);
+log4.i(findMedianSortedArrays([1],[2,3,4,5,6,7,8,9,10]));
+// 1,2,3,4,5,6,7,8,9,10

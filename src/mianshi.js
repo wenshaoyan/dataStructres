@@ -3,6 +3,8 @@
  */
 'use strict';
 const Log = require('./modules/log');
+const customStruct = require('./modules/custom-struct');
+const CustomMath = customStruct.CustomMath;
 class A {
 
 }
@@ -61,7 +63,7 @@ var sn = Student.prototype.sayName.bind(obj);
 sn("bind1", "bind2", "bind3"); // bind需要先绑定，再执行
 
 // EventEmitter是node中一个实现观察者模式的类，主要功能是监听和发射消息，用于处理多模块交互问题.
-const log3 = new Log(true);
+const log3 = new Log(false);
 const events = require("events");
 const eventEmitter = events.EventEmitter;
 
@@ -79,20 +81,22 @@ MyEmitter.prototype=new eventEmitter;
 
 const myEmitter = new MyEmitter();
 myEmitter.on("hello",function(data){
-    console.log(data)
+    log3.i(data)
 
 });
 myEmitter.on("error",function (err) {
-    console.log(err)
+    log3.i(err)
 
 })
 myEmitter.emit("hello","lalal");
 
-const http = require("http");
+var leakArray = [];
+exports.leak = function () {
+    leakArray.push("leak" + Math.random());
+};
 
-http.createServer(function (req, res) {
-    res.writeHead(200,"text/html");
-    res.write("hello");
-    res.end();
-}).listen(3000);
+const log4 = new Log(true);
+log4.i()
+log4.i(CustomMath.round(11.2))
+log4.i(Math.round(11.2));
 

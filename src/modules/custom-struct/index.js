@@ -14,3 +14,5 @@ exports.CustomSet = require('./lib/CustomSet');
 exports.HashTable = require('./lib/HashTable');
 exports.BinarySearchTree = require('./lib/BinarySearchTree');
 exports.ArrayList = require('./lib/ArrayList');
+exports.CustomMath = require('./lib/CustomMath');
+
