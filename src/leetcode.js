@@ -160,7 +160,7 @@ const lengthOfLongestSubstring = function (s) { // O(n)  O(n)
             if (currentSub.length >= maxSub.length) {
                 maxSub = setJoin(currentSub);
             }
-            currentSub = currentSub.slice(index+1,currentSub.length);
+            currentSub = currentSub.slice(index + 1, currentSub.length);
         }
         currentSub.push(currentStr)
 
@@ -190,22 +190,56 @@ log3.i(lengthOfLongestSubstring("456789022ebadb2"));
  * @param nums2
  * @return {number}
  */
-const findMedianSortedArrays = function(nums1, nums2) {
+const findMedianSortedArrays = function (nums1, nums2) {
     const num3 = nums1.concat(nums2);
-    num3.sort((v1,v2)=>{
-        return v1-v2;
+    num3.sort((v1, v2) => {
+        return v1 - v2;
     });
     const len = num3.length;
-    const index = Math.floor(len/2);
-    let value ;
-    if (len % 2 === 0){
-        value = (num3[index]+num3[index-1])/2;
-    }else{
+    const index = Math.floor(len / 2);
+    let value;
+    if (len % 2 === 0) {
+        value = (num3[index] + num3[index - 1]) / 2;
+    } else {
         value = num3[index];
     }
 
     return value;
 };
-const log4 = new Log(true);
-log4.i(findMedianSortedArrays([1],[2,3,4,5,6,7,8,9,10]));
+const log4 = new Log(false);
+log4.i(findMedianSortedArrays([1], [2, 3, 4, 5, 6, 7, 8, 9, 10]));
 // 1,2,3,4,5,6,7,8,9,10
+
+/**
+ * Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
+ * 给定一个字符串 s,找到最大的回文字符子串
+ * Input: "babad"
+ * Output: "bab"
+ * 回文
+ * @param s
+ * @return {string}
+ */
+const longestPalindrome = function (s) {    // 暴力查找 找出所有的子串 再依次判断   O(n^3)  O(1)
+    let maxStr = '';
+    const len = s.length;
+    for (let i = 0; i < len; i++) {
+        let str = s[i];
+        if (judgePalindrome(str) && str.length>=maxStr.length) maxStr = str;
+        for (let j = i + 1; j < len; j++) {
+            str += s[j];
+            if (judgePalindrome(str) && str.length>=maxStr.length) maxStr = str;
+        }
+    }
+    return maxStr;
+
+};
+const judgePalindrome = (str) => {
+    if (str.length === 1) {
+        return true;
+    }
+    return str === str.split("").reverse().join("");
+
+};
+const log5 = new Log(true);
+log5.i("===");
+log5.i(longestPalindrome("civilwartestingwhetherthatnaptionoranynartionsoconceivedandsodedicatedcanlongendureWeareqmetonagreatbattlefiemldoftzhatwarWehavecometodedicpateaportionofthatfieldasafinalrestingplaceforthosewhoheregavetheirlivesthatthatnationmightliveItisaltogetherfangandproperthatweshoulddothisButinalargersensewecannotdedicatewecannotconsecratewecannothallowthisgroundThebravelmenlivinganddeadwhostruggledherehaveconsecrateditfaraboveourpoorponwertoaddordetractTgheworldadswfilllittlenotlenorlongrememberwhatwesayherebutitcanneverforgetwhattheydidhereItisforusthelivingrathertobededicatedheretotheulnfinishedworkwhichtheywhofoughtherehavethusfarsonoblyadvancedItisratherforustobeherededicatedtothegreattdafskremainingbeforeusthatfromthesehonoreddeadwetakeincreaseddevotiontothatcauseforwhichtheygavethelastpfullmeasureofdevotionthatweherehighlyresolvethatthesedeadshallnothavediedinvainthatthisnationunsderGodshallhaveanewbirthoffreedomandthatgovernmentofthepeoplebythepeopleforthepeopleshallnotperishfromtheearth"));
