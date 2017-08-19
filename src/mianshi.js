@@ -102,7 +102,7 @@ log4.i(Math.round(11.2));
 
 
 const log5 = new Log(true);
-const multiWayTree = new MultiWayTree();
+const multiWayTree = new MultiWayTree('id');
 
 const data = [
     {id: '351', parent: null},
@@ -110,6 +110,10 @@ const data = [
     {id: '353', parent: '352'},
     {id: '354', parent: '353'}
 ];
-log5.i("id" in {v:undefined},Symbol('a'));
+for (let val of data){
+    multiWayTree.insert(val);
+}
+multiWayTree.print();
+
 
 

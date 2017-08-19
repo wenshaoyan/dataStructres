@@ -10,6 +10,7 @@ const MultiWayTree = (function () {
         constructor(key, parent) {
             this._key = key;
             this._parent = parent;
+            this._childes = [];
         }
 
         get key() {
@@ -27,14 +28,33 @@ const MultiWayTree = (function () {
         set parent(value) {
             this._parent = value;
         }
+
+        get childes() {
+            return this._childes;
+        }
+
+        set childes(value) {
+            this._childes = value;
+        }
     }
     const _root = Symbol("_root");
     const _head = Symbol('_head');
+    const _func_insert_node = Symbol('_func_insert_node');
 
+    const insertNode = function(root,node) {
+        if (root.key === node.parent) {
+            return;
+        }
+        for (let val of root.childes){
+            return insertNode(val,node);
+        }
+
+    };
     class MultiWayTree {
         constructor(keyName) {
             this[_root] = new Node(_head, null);
             this._keyName = keyName;
+            this[_func_insert_node] = insertNode;
         }
 
         get keyName() {
@@ -45,6 +65,7 @@ const MultiWayTree = (function () {
             this._keyName = value;
         }
 
+
         insert(value) {
             if (!(this._keyName in value) || !('parent' in value)) {
                 return false;
@@ -52,13 +73,18 @@ const MultiWayTree = (function () {
             const node = new Node(value[this._keyName], value.parent);
             if (!value.parent) {    // 一级
                 node.parent = this[_root];
-                this['level_1'] = new Map();
+                this[_root].childes.push(node);
             } else {
-
+                this[_func_insert_node](this[_root],node);
             }
 
 
         }
+
+        print() {
+
+        }
+
 
     }
     return MultiWayTree;
