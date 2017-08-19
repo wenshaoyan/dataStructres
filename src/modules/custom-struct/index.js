@@ -15,4 +15,5 @@ exports.HashTable = require('./lib/HashTable');
 exports.BinarySearchTree = require('./lib/BinarySearchTree');
 exports.ArrayList = require('./lib/ArrayList');
 exports.CustomMath = require('./lib/CustomMath');
+exports.MultiWayTree = require('./lib/MultiWayTree');
 

@@ -5,6 +5,7 @@
 const Log = require('./modules/log');
 const customStruct = require('./modules/custom-struct');
 const CustomMath = customStruct.CustomMath;
+const MultiWayTree = customStruct.MultiWayTree;
 class A {
 
 }
@@ -39,7 +40,6 @@ const animal = new Animal("1111");
 log1.i(person.sayName(), animal.sayName());
 
 
-
 // call apply bind 区别
 // 共同点:三者都可以把一个函数应用到其他对象上 也就是修改this的指向 这里修改sayName的this指向obj
 // 不同点: apply传的参数为数组  call为多个参数 bind为先绑定this指向后 在执行
@@ -49,8 +49,8 @@ const log2 = new Log(false);
 
 function Student() {
 }
-Student.prototype.sayName = function (p1,p2,p3) {
-    log2.i(this.name,p1,p2,p3);
+Student.prototype.sayName = function (p1, p2, p3) {
+    log2.i(this.name, p1, p2, p3);
 }
 
 var obj = {name: 'ws'}; // 注意这是一个普通对象，它不是Person的实例
@@ -67,8 +67,8 @@ const log3 = new Log(false);
 const events = require("events");
 const eventEmitter = events.EventEmitter;
 
-class MyEmitter1 extends eventEmitter{
-    constructor(){
+class MyEmitter1 extends eventEmitter {
+    constructor() {
         super();
     }
 
@@ -77,26 +77,39 @@ class MyEmitter1 extends eventEmitter{
 function MyEmitter() {
     eventEmitter.call(this);
 }
-MyEmitter.prototype=new eventEmitter;
+MyEmitter.prototype = new eventEmitter;
 
 const myEmitter = new MyEmitter();
-myEmitter.on("hello",function(data){
+myEmitter.on("hello", function (data) {
     log3.i(data)
 
 });
-myEmitter.on("error",function (err) {
+myEmitter.on("error", function (err) {
     log3.i(err)
 
 })
-myEmitter.emit("hello","lalal");
+myEmitter.emit("hello", "lalal");
 
 var leakArray = [];
 exports.leak = function () {
     leakArray.push("leak" + Math.random());
 };
 
-const log4 = new Log(true);
-log4.i()
-log4.i(CustomMath.round(11.2))
+const log4 = new Log(false);
+log4.i();
+log4.i(CustomMath.round(11.2));
 log4.i(Math.round(11.2));
+
+
+const log5 = new Log(true);
+const multiWayTree = new MultiWayTree();
+
+const data = [
+    {id: '351', parent: null},
+    {id: '352', parent: '351'},
+    {id: '353', parent: '352'},
+    {id: '354', parent: '353'}
+];
+log5.i("id" in {v:undefined},Symbol('a'));
+
 

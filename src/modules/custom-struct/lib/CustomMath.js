@@ -27,7 +27,6 @@ const CustomMath = (function () {
             } else {
                 n -= 5;
             }
-            console.log(new Date().getMilliseconds())
             return parseInt(n / 10);
         }
 
