@@ -106,14 +106,19 @@ const multiWayTree = new MultiWayTree('id');
 
 const data = [
     {id: '351', parent: null},
+    {id: '358', parent: '353'},
     {id: '352', parent: '351'},
     {id: '353', parent: '352'},
-    {id: '354', parent: '353'}
+    /*{id: '354', parent: '353'},
+    {id: '355', parent: '353'}*/
 ];
 for (let val of data){
     multiWayTree.insert(val);
 }
-multiWayTree.print();
+log5.i(JSON.stringify(multiWayTree.toArray()));
+
+// multiWayTree.insert({id: '355', parent: '353'});
+log5.i(JSON.stringify(multiWayTree.toArray()));
 
 
 

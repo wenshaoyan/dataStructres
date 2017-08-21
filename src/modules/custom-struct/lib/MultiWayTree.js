@@ -7,10 +7,11 @@
 const MultiWayTree = (function () {
 
     class Node {
-        constructor(key, parent) {
+        constructor(key, parent, value) {
             this._key = key;
             this._parent = parent;
             this._childes = [];
+            this._value = value;
         }
 
         get key() {
@@ -36,25 +37,47 @@ const MultiWayTree = (function () {
         set childes(value) {
             this._childes = value;
         }
+
+        get value() {
+            return this._value;
+        }
+
+        set value(value) {
+            this._value = value;
+        }
     }
+
     const _root = Symbol("_root");
     const _head = Symbol('_head');
     const _func_insert_node = Symbol('_func_insert_node');
+    const _func_recursion_node = Symbol('_func_recursion_node');
+    const _wait_allot = Symbol('_wait_allot');
 
-    const insertNode = function(root,node) {
+    const insertNode = function (root, node) {
         if (root.key === node.parent) {
-            return;
+            root.childes.push(node);
+            return true;
         }
-        for (let val of root.childes){
-            return insertNode(val,node);
+        for (let val of root.childes) {
+            return insertNode(val, node);
         }
+        return false;
 
     };
+    const recursion = function (list, root) {
+        list.push(JSON.parse(JSON.stringify(root.value)));
+        for (let val of root.childes) {
+            recursion(list[0].next, val);
+        }
+    };
+
     class MultiWayTree {
         constructor(keyName) {
-            this[_root] = new Node(_head, null);
+            this[_root] = new Node(_head, null, {next: []});
             this._keyName = keyName;
             this[_func_insert_node] = insertNode;
+            this[_func_recursion_node] = recursion;
+            this[_wait_allot] = new Map();
         }
 
         get keyName() {
@@ -70,23 +93,40 @@ const MultiWayTree = (function () {
             if (!(this._keyName in value) || !('parent' in value)) {
                 return false;
             }
-            const node = new Node(value[this._keyName], value.parent);
-            if (!value.parent) {    // 一级
+
+            let valueCopy = JSON.parse(JSON.stringify(value));
+            valueCopy.next = [];
+            const node = new Node(value[this._keyName], value.parent, valueCopy);
+            if (!valueCopy.parent) {    // 一级
                 node.parent = this[_root];
                 this[_root].childes.push(node);
             } else {
-                this[_func_insert_node](this[_root],node);
+                const newVar = this[_func_insert_node](this[_root], node);
+                if (!newVar) {  // 添加到待分配中
+                    if (this[_wait_allot].has(node.value.parent)) {
+                        this[_wait_allot].get(node.value.parent).push(node);
+                    } else {
+                        this[_wait_allot].set(node.value.parent, [node]);
+                    }
+                } else {
+                    if (this[_wait_allot].has(node.key)) {  //
+                        // node.childes = node.childes.concat(this[_wait_allot]);
+                    }
+                }
             }
-
 
         }
 
-        print() {
+        toArray() {
+            const list = [];
+            this[_func_recursion_node](list, this[_root]);
 
+            return list[0].next;
         }
 
 
     }
+
     return MultiWayTree;
 })();
 module.exports = MultiWayTree;
