@@ -185,11 +185,4 @@ for (let val of data1){
 }
 log5.i(JSON.stringify(multiWayTree1.toArray()));
 
-let y = new Set();
-y.add({a:1});
-y.add({a:1});
-for (let value of y){
-    y.delete(value)
-}
-console.log(y.size)
-// console.log(y)
+

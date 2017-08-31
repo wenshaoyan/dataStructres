@@ -5,13 +5,16 @@
 'use strict';
 
 const MultiWayTree = (function () {
-
+    /**
+     * 节点
+     */
     class Node {
         constructor(key, parent, value) {
-            this._key = key;
-            this._parent = parent;
-            this._childes = [];
-            this._value = value;
+            this._key = key;        // 节点唯一标识
+            this._childes = [];     // 所有子节点节点集合
+            this._value = value;    // 节点内容
+            this._parents = new Set(); // 父节点 可能有多个
+            this._parents.add(parent);
         }
 
         get key() {
@@ -22,13 +25,6 @@ const MultiWayTree = (function () {
             this._key = value;
         }
 
-        get parent() {
-            return this._parent;
-        }
-
-        set parent(value) {
-            this._parent = value;
-        }
 
         get childes() {
             return this._childes;
@@ -45,17 +41,34 @@ const MultiWayTree = (function () {
         set value(value) {
             this._value = value;
         }
+
+        get parents() {
+            return this._parents;
+        }
+
+        set parents(value) {
+            this._parents = value;
+        }
     }
 
-    const _root = Symbol("_root");
-    const _head = Symbol('_head');
+    // 根节点
+    const _root = Symbol('_root');
+    // 根节点对应的标识符号
+    const _root_tag = Symbol('_root_tag');
+    // 插入节点函数
     const _func_insert_node = Symbol('_func_insert_node');
+    // 递归树函数
     const _func_recursion_node = Symbol('_func_recursion_node');
+
     const _wait_allot = Symbol('_wait_allot');
+    // 待分配节点队列
     const _wait_allot_set = Symbol('_wait_allot_set');
+    // 根据code对应node的映射
+    const _node_hash = Symbol('_node_hash');
 
     const insertNode = function (root, node) {
-        if (root.key === node.parent) {
+        if (node.parents.has(root.key)) {
+            // console.log("========2",root,"===========1",node);
             root.childes.push(node);
             return true;
         }
@@ -65,22 +78,27 @@ const MultiWayTree = (function () {
         return false;
 
     };
-    const recursion = function (list, root) {
-        console.log(list,JSON.parse(JSON.stringify(root.value)));
-        list.push(JSON.parse(JSON.stringify(root.value)));
-        for (let val of root.childes) {
-            recursion(list[0].next, val);
+    const recursion = function (list, chiles) {
+        let index = 0;
+        for (let val of chiles){
+            console.log(chiles)
+            val.next.push(val);
+            recursion(list[index],val.childes);
+            index++;
         }
+
+
     };
 
     class MultiWayTree {
         constructor(keyName) {
-            this[_root] = new Node(_head, null, {next: []});
+            this[_root] = new Node(_root_tag, null, {next: []});
             this._keyName = keyName;
             this[_func_insert_node] = insertNode;
             this[_func_recursion_node] = recursion;
             this[_wait_allot] = new Map();
             this[_wait_allot_set] = new Set();
+            this[_node_hash] = new Map();
         }
 
         get keyName() {
@@ -91,52 +109,58 @@ const MultiWayTree = (function () {
             this._keyName = value;
         }
 
-
         insert(value) {
+
             if (!(this._keyName in value) || !('parent' in value)) {
                 return false;
             }
+            if (this[_node_hash].has(value[this.keyName])) {
+                const getNode = this[_node_hash].get(value[this.keyName]);
+                if (getNode.parents.has(value.parent)) {   // 重复数据 不添加
+                    console.error(`${this.keyName}=${value[this.keyName]} and parent=${value.parent} is repeat`);
+                } else {
+                    getNode.parents.add(value.parent);
+                    // 多个父节点时  往value[this.keyName]对应的父节点的childes添加节点
+                    if (this[_node_hash].has(value.parent)) {
+                        this[_node_hash].get(value.parent).childes.push(getNode);
+                        // console.log(value.parent,this[_node_hash].get(value.parent));
+                    } else {
 
+                    }
+                }
+                return true;
+            }
             let valueCopy = JSON.parse(JSON.stringify(value));
             valueCopy.next = [];
-            const node = new Node(value[this._keyName], value.parent, valueCopy);
+            const node = new Node(value[this.keyName], value.parent, valueCopy);
+            this[_node_hash].set(value[this.keyName], node);
             if (!valueCopy.parent) {    // 一级
-                node.parent = this[_root];
+                node.parents.add(this[_root]);
                 this[_root].childes.push(node);
             } else {
                 const newVar = this[_func_insert_node](this[_root], node);
                 if (!newVar) {  // 添加到待分配中
-                    if (this[_wait_allot].has(node.value.parent)) {
-                        this[_wait_allot].get(node.value.parent).push(node);
-                    } else {
-                        this[_wait_allot].set(node.value.parent, [node]);
-                    }
                     this[_wait_allot_set].add(node);
-                } else {
-                    if (this[_wait_allot].has(node.key)) {  //
-                        // node.childes = node.childes.concat(this[_wait_allot]);
-                    }
                 }
             }
+            // 每次需要把待分配队列递归遍历
             this.clearWait(node);
+            return true;
         }
 
         clearWait(node) {
             let isRecursion = false;
-            let nodeList =  [];
+            let nodeList = [];
             for (let values of this[_wait_allot_set]) {
-                if (values.value.parent === node.key) {
-                    // console.log(node.childes)
-                    // console.log("=============")
-                    // console.log(values)
-                    node.childes = node.childes.concat(values);
+                if (values.parents.has(node.key)) {
+                    const newVar = this[_func_insert_node](node, values);
                     this[_wait_allot_set].delete(values);
                     isRecursion = true;
                     nodeList.push(values);
                 }
             }
             if (isRecursion && this[_wait_allot_set].size !== 0) {
-                for (let val of nodeList){
+                for (let val of nodeList) {
                     this.clearWait(val);
                 }
             }
@@ -144,9 +168,10 @@ const MultiWayTree = (function () {
 
         toArray() {
             const list = [];
-            this[_func_recursion_node](list, this[_root]);
 
-            return list[0].next;
+            this[_func_recursion_node](list, this[_root].childes);
+            console.log(this[_root])
+            return list;
         }
 
 
