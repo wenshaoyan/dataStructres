@@ -52,6 +52,7 @@ const MultiWayTree = (function () {
     const _func_insert_node = Symbol('_func_insert_node');
     const _func_recursion_node = Symbol('_func_recursion_node');
     const _wait_allot = Symbol('_wait_allot');
+    const _wait_allot_set = Symbol('_wait_allot_set');
 
     const insertNode = function (root, node) {
         if (root.key === node.parent) {
@@ -65,6 +66,7 @@ const MultiWayTree = (function () {
 
     };
     const recursion = function (list, root) {
+        console.log(list,JSON.parse(JSON.stringify(root.value)));
         list.push(JSON.parse(JSON.stringify(root.value)));
         for (let val of root.childes) {
             recursion(list[0].next, val);
@@ -78,6 +80,7 @@ const MultiWayTree = (function () {
             this[_func_insert_node] = insertNode;
             this[_func_recursion_node] = recursion;
             this[_wait_allot] = new Map();
+            this[_wait_allot_set] = new Set();
         }
 
         get keyName() {
@@ -108,13 +111,35 @@ const MultiWayTree = (function () {
                     } else {
                         this[_wait_allot].set(node.value.parent, [node]);
                     }
+                    this[_wait_allot_set].add(node);
                 } else {
                     if (this[_wait_allot].has(node.key)) {  //
                         // node.childes = node.childes.concat(this[_wait_allot]);
                     }
                 }
             }
+            this.clearWait(node);
+        }
 
+        clearWait(node) {
+            let isRecursion = false;
+            let nodeList =  [];
+            for (let values of this[_wait_allot_set]) {
+                if (values.value.parent === node.key) {
+                    // console.log(node.childes)
+                    // console.log("=============")
+                    // console.log(values)
+                    node.childes = node.childes.concat(values);
+                    this[_wait_allot_set].delete(values);
+                    isRecursion = true;
+                    nodeList.push(values);
+                }
+            }
+            if (isRecursion && this[_wait_allot_set].size !== 0) {
+                for (let val of nodeList){
+                    this.clearWait(val);
+                }
+            }
         }
 
         toArray() {
